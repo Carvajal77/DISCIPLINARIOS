@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe Ejecutivo — Procesos Disciplinarios Mayo–Junio 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#1B6BB0;--green:#3AAA35;--orange:#F7941D;--red:#ED1C24;
+  --dark:#1a1a2e;--bg:#f4f6f9;--surface:#ffffff;--border:#e2e8f0;
+  --text:#1e2432;--muted:#64748b;--radius:12px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6}
+
+/* HEADER */
+.report-header{background:linear-gradient(135deg,#0f1f3d 0%,#1a3560 55%,#0f3460 100%);color:#fff;padding:44px 40px 32px;position:relative;overflow:hidden}
+.report-header::before{content:'';position:absolute;top:-80px;right:-60px;width:320px;height:320px;background:rgba(27,107,176,.2);border-radius:50%}
+.report-header::after{content:'';position:absolute;bottom:-60px;left:28%;width:200px;height:200px;background:rgba(58,170,53,.12);border-radius:50%}
+.header-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:14px}
+.header-title{font-size:30px;font-weight:600;line-height:1.2;margin-bottom:6px;position:relative;z-index:1}
+.header-sub{font-size:14px;color:rgba(255,255,255,.6);margin-bottom:24px;position:relative;z-index:1}
+.header-meta{display:flex;gap:28px;flex-wrap:wrap;position:relative;z-index:1}
+.hm-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.4);margin-bottom:2px}
+.hm-value{font-size:13px;font-weight:500;color:rgba(255,255,255,.88)}
+
+/* LAYOUT */
+.container{max-width:1080px;margin:0 auto;padding:28px 20px}
+.section{margin-bottom:36px}
+.section-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:18px}
+.section-num{flex-shrink:0;width:28px;height:28px;background:var(--blue);color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;margin-top:1px}
+.section-title{font-size:17px;font-weight:600;color:var(--text);line-height:1.3}
+.section-desc{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.card-title{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+
+/* KPI TILES */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:24px}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;position:relative;overflow:hidden}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--ac,var(--blue));border-radius:3px 0 0 3px}
+.kpi-label{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.kpi-value{font-size:26px;font-weight:600;color:var(--text);line-height:1;margin-bottom:3px}
+.kpi-sub{font-size:11px;color:var(--muted)}
+.kpi-delta{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:500;padding:2px 8px;border-radius:20px;margin-top:5px}
+.delta-ok{background:#dcfce7;color:#16a34a}
+.delta-warn{background:#fef9c3;color:#a16207}
+.delta-bad{background:#fee2e2;color:#dc2626}
+
+/* FILTERS */
+.filter-bar{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.filter-label{font-size:12px;color:var(--muted);font-weight:500}
+.filter-btn{padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .14s}
+.filter-btn:hover{border-color:var(--blue);color:var(--blue)}
+.filter-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+
+/* CHART WRAPPERS */
+.chart-canvas-wrap{position:relative;width:100%}
+
+/* INSIGHTS */
+.insight{background:#eff6ff;border-left:3px solid var(--blue);border-radius:0 8px 8px 0;padding:10px 14px;margin-top:14px;font-size:12px;color:#1e40af;line-height:1.5}
+.insight strong{font-weight:600}
+.insight-warn{background:#fff7ed;border-left-color:var(--orange);color:#9a3412}
+.insight-ok{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+.insight-red{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+
+/* LEGEND */
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
+.legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* STATUS PILLS */
+.pill{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em}
+.pill-not{background:#dbeafe;color:#1e40af}
+.pill-arch{background:#dcfce7;color:#14532d}
+.pill-cit{background:#fef9c3;color:#92400e}
+.pill-desc{background:#f3e8ff;color:#6b21a8}
+.pill-rep{background:#fee2e2;color:#991b1b}
+
+/* EMBUDO */
+.funnel-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.funnel-label{font-size:11px;font-weight:500;color:var(--text);width:140px;flex-shrink:0;text-align:right}
+.funnel-track{flex:1;background:#e2e8f0;border-radius:4px;height:22px;position:relative}
+.funnel-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600;color:#fff;min-width:32px}
+
+/* TABS */
+.tab-bar{display:flex;border-bottom:1px solid var(--border);margin-bottom:16px}
+.tab-btn{padding:9px 16px;border:none;background:none;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:'DM Sans',sans-serif;transition:all .14s}
+.tab-btn.active{color:var(--blue);border-bottom-color:var(--blue)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:28px 0}
+
+/* FOOTER */
+.report-footer{background:#1a1a2e;color:rgba(255,255,255,.5);text-align:center;padding:18px;font-size:11px;margin-top:32px}
+
+/* MINI STAT */
+.mini-stat{text-align:center;padding:10px 0}
+.mini-val{font-size:20px;font-weight:600;color:var(--text);line-height:1}
+.mini-lbl{font-size:11px;color:var(--muted);margin-top:3px}
+
+@media(max-width:680px){
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .report-header{padding:28px 18px 22px}
+  .header-title{font-size:22px}
+  .container{padding:16px 14px}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="report-header">
+  <div class="header-badge">Gestión del Talento Humano</div>
+  <h1 class="header-title">Procesos Disciplinarios<br>Mayo – Junio 2026</h1>
+  <p class="header-sub">Análisis ejecutivo de sanciones, estados y tiempos de cierre por centro productivo</p>
+  <div class="header-meta">
+    <div><div class="hm-label">Período</div><div class="hm-value">Mayo – Junio 2026</div></div>
+    <div><div class="hm-label">Centros</div><div class="hm-value">Bianchi · Supercoco · Trululu</div></div>
+    <div><div class="hm-label">Total solicitudes</div><div class="hm-value">314 procesos</div></div>
+    <div><div class="hm-label">Generado</div><div class="hm-value" id="fecha-gen">—</div></div>
+    <div><div class="hm-label">Clasificación</div><div class="hm-value">Interno GTH</div></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi-card" style="--ac:#1B6BB0">
+      <div class="kpi-label">Total solicitudes</div>
+      <div class="kpi-value">314</div>
+      <div class="kpi-sub">Mayo (155) + Junio (159)</div>
+    </div>
+    <div class="kpi-card" style="--ac:#3AAA35">
+      <div class="kpi-label">Ejecutadas (Arch. + Notif.)</div>
+      <div class="kpi-value">87</div>
+      <div class="kpi-sub">27.7% del total del período</div>
+      <span class="kpi-delta delta-warn">Mayo 52.3% · Junio 3.8%</span>
+    </div>
+    <div class="kpi-card" style="--ac:#F7941D">
+      <div class="kpi-label">En proceso (Citado + Descargos)</div>
+      <div class="kpi-value">126</div>
+      <div class="kpi-sub">40.1% del total — en trámite activo</div>
+      <span class="kpi-delta delta-ok">Gestión activa</span>
+    </div>
+    <div class="kpi-card" style="--ac:#ED1C24">
+      <div class="kpi-label">Sin gestión (Reportado)</div>
+      <div class="kpi-value">101</div>
+      <div class="kpi-sub">32.2% sin ningún movimiento</div>
+      <span class="kpi-delta delta-bad">Requiere priorización</span>
+    </div>
+    <div class="kpi-card" style="--ac:#8b5cf6">
+      <div class="kpi-label">Tiempo prom. cierre</div>
+      <div class="kpi-value">22.9</div>
+      <div class="kpi-sub">días calendario (consolidado)</div>
+      <span class="kpi-delta delta-bad">Supera meta 12–15 días</span>
+    </div>
+  </div>
+
+  <!-- ══ S1: REPORTADAS vs EJECUTADAS ══ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div>
+        <div class="section-title">Sanciones reportadas vs. ejecutadas</div>
+        <div class="section-desc">Comparativa mensual — ejecutadas incluye estados Archivado y Notificado</div>
+      </div>
+    </div>
+    <div class="grid-2" style="gap:18px">
+      <div class="card">
+        <div class="card-title">Evolución mayo – junio</div>
+        <div class="legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#1B6BB0"></span>Reportadas</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#3AAA35"></span>Ejecutadas</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#F7941D"></span>Pendientes</span>
+        </div>
+        <div class="chart-canvas-wrap" style="height:230px">
+          <canvas id="chartRvsE" role="img" aria-label="Sanciones reportadas versus ejecutadas mayo y junio 2026">Mayo: 155 reportadas, 81 ejecutadas, 74 pendientes. Junio: 159 reportadas, 6 ejecutadas, 153 pendientes.</canvas>
+        </div>
+        <div class="insight insight-red">
+          <strong>Junio sin cierre:</strong> de 159 solicitudes, solo 6 alcanzaron estado ejecutado, lo que refleja que la mayoría de casos de junio están aún en trámite activo (Citado, En descargos o Reportado).
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Distribución acumulada por estado</div>
+        <div class="legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#ED1C24"></span>Reportado (32.2%)</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Citado (30.6%)</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#3AAA35"></span>Notificado (14.3%)</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#059669"></span>Archivado (13.4%)</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#8b5cf6"></span>En descargos (9.6%)</span>
+        </div>
+        <div class="chart-canvas-wrap" style="height:230px">
+          <canvas id="chartDonut" role="img" aria-label="Distribución por estado. Reportado 101, Citado 96, Notificado 45, Archivado 42, En descargos 30.">Reportado 101, Citado 96, Notificado 45, Archivado 42, En descargos 30.</canvas>
+        </div>
+        <div class="insight">
+          <strong>Pipeline saludable:</strong> el 40% está en trámite activo (Citado + En descargos). El estado "Reportado" es natural en junio dado que los procesos aún están en curso.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══ S2: POR CENTRO / PLANTA ══ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div>
+        <div class="section-title">Procesos por centro operativo y planta</div>
+        <div class="section-desc">Distribución de solicitudes según área productiva — filtra por centro</div>
+      </div>
+    </div>
+    <div class="filter-bar">
+      <span class="filter-label">Filtrar:</span>
+      <button class="filter-btn active" onclick="filterCentro('todos',this)">Todos</button>
+      <button class="filter-btn" onclick="filterCentro('bianchi',this)">Bianchi</button>
+      <button class="filter-btn" onclick="filterCentro('super',this)">Supercoco</button>
+      <button class="filter-btn" onclick="filterCentro('trululu',this)">Trululu</button>
+    </div>
+    <div class="grid-2" style="gap:16px">
+      <div class="card">
+        <div class="card-title">Solicitudes por centro</div>
+        <div class="chart-canvas-wrap" style="height:210px">
+          <canvas id="chartCentro" role="img" aria-label="Procesos por centro: Supercoco 113, Trululu 103, Bianchi 98">Supercoco 113, Trululu 103, Bianchi 98.</canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Solicitudes por planta</div>
+        <div class="chart-canvas-wrap" style="height:210px">
+          <canvas id="chartPlanta" role="img" aria-label="Procesos por planta productiva">Top plantas del período.</canvas>
+        </div>
+      </div>
+    </div>
+    <div class="insight insight-ok" style="margin-top:14px">
+      <strong>Supercoco lidera en volumen</strong> con 113 casos (36% del total), seguido de Trululu con 103 (33%) y Bianchi con 98 (31%). La distribución es relativamente equilibrada entre centros, lo que sugiere una gestión activa generalizada.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══ S3: MOTIVOS ══ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div>
+        <div class="section-title">Motivos de los procesos disciplinarios</div>
+        <div class="section-desc">Causal de cada solicitud, desglosado por centro operativo</div>
+      </div>
+    </div>
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('mot-cons',this)">Consolidado</button>
+      <button class="tab-btn" onclick="switchTab('mot-bianchi',this)">Bianchi</button>
+      <button class="tab-btn" onclick="switchTab('mot-super',this)">Supercoco</button>
+      <button class="tab-btn" onclick="switchTab('mot-trululu',this)">Trululu</button>
+    </div>
+    <div id="mot-cons" class="tab-panel active">
+      <div class="card">
+        <div class="card-title">Todos los centros — top 8 motivos</div>
+        <div class="chart-canvas-wrap" style="height:280px">
+          <canvas id="chartMotCons" role="img" aria-label="Frecuencia de motivos consolidado. Ausentismo 118, Incumplimiento funciones 44, Incumplimiento horarios 43, Incumplimiento BPM 26, Ingreso celular 24, No entrega documentación 15, Ingreso vapeador 8, Daños instalaciones 7.">Ausentismo 118, Incumplimiento funciones 44, otros.</canvas>
+        </div>
+      </div>
+    </div>
+    <div id="mot-bianchi" class="tab-panel">
+      <div class="card">
+        <div class="card-title">Bianchi — top motivos</div>
+        <div class="chart-canvas-wrap" style="height:240px">
+          <canvas id="chartMotBianchi" role="img" aria-label="Motivos Bianchi. Ausentismo 33, Incumplimiento horarios 21, BPM 10, Celular 7, Funciones 6, Documentación 5.">Ausentismo 33, Incumplimiento horarios 21, BPM 10.</canvas>
+        </div>
+      </div>
+    </div>
+    <div id="mot-super" class="tab-panel">
+      <div class="card">
+        <div class="card-title">Supercoco — top motivos</div>
+        <div class="chart-canvas-wrap" style="height:240px">
+          <canvas id="chartMotSuper" role="img" aria-label="Motivos Supercoco. Ausentismo 42, Funciones 29, Horarios 14, BPM 7, Documentación 5.">Ausentismo 42, Funciones 29, Horarios 14.</canvas>
+        </div>
+      </div>
+    </div>
+    <div id="mot-trululu" class="tab-panel">
+      <div class="card">
+        <div class="card-title">Trululu — top motivos</div>
+        <div class="chart-canvas-wrap" style="height:240px">
+          <canvas id="chartMotTrululu" role="img" aria-label="Motivos Trululu. Ausentismo 43, Celular 15, Funciones 9, BPM 9, Horarios 8, Vapeador 5.">Ausentismo 43, Ingreso celular 15, Funciones 9.</canvas>
+        </div>
+      </div>
+    </div>
+    <div class="insight" style="margin-top:14px">
+      <strong>Ausentismo domina en los tres centros</strong> con 118 casos (37.6% del total). Trululu presenta un patrón diferenciador: el ingreso de dispositivos (celulares y vapeadores) es su segunda causal con 20 casos, mientras que en Bianchi y Supercoco el incumplimiento de horarios y funciones son más frecuentes.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══ S4: ESTADOS ══ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div>
+        <div class="section-title">Estado de los procesos</div>
+        <div class="section-desc">Toda entrada en la base es una solicitud formal de proceso disciplinario</div>
+      </div>
+    </div>
+    <div class="grid-2" style="gap:16px;margin-bottom:14px">
+      <div class="card">
+        <div class="card-title">Leyenda de estados</div>
+        <div style="display:flex;flex-direction:column;gap:9px;margin-top:4px">
+          <div style="display:flex;align-items:center;gap:10px"><span class="pill pill-rep">Reportado</span><span style="font-size:12px;color:var(--muted)">Solicitud recibida, sin gestión aún</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span class="pill pill-cit">Citado</span><span style="font-size:12px;color:var(--muted)">Convocado a audiencia de descargos</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span class="pill pill-desc">En descargos</span><span style="font-size:12px;color:var(--muted)">Diligencia activa en curso</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span class="pill pill-not">Notificado</span><span style="font-size:12px;color:var(--muted)">Sanción comunicada formalmente</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span class="pill pill-arch">Archivado</span><span style="font-size:12px;color:var(--muted)">Cerrado — sanción ejecutada</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Embudo de proceso — consolidado</div>
+        <div style="margin-top:8px">
+          <div class="funnel-row">
+            <div class="funnel-label">Solicitudes (314)</div>
+            <div class="funnel-track"><div class="funnel-fill" style="width:100%;background:#1B6BB0">314</div></div>
+          </div>
+          <div class="funnel-row">
+            <div class="funnel-label">En proceso (126)</div>
+            <div class="funnel-track"><div class="funnel-fill" style="width:68%;background:#F7941D">126 (40.1%)</div></div>
+          </div>
+          <div class="funnel-row">
+            <div class="funnel-label">Citados (96)</div>
+            <div class="funnel-track"><div class="funnel-fill" style="width:55%;background:#f59e0b">96 (30.6%)</div></div>
+          </div>
+          <div class="funnel-row">
+            <div class="funnel-label">Notificados (45)</div>
+            <div class="funnel-track"><div class="funnel-fill" style="width:28%;background:#3AAA35">45 (14.3%)</div></div>
+          </div>
+          <div class="funnel-row">
+            <div class="funnel-label">Archivados (42)</div>
+            <div class="funnel-track"><div class="funnel-fill" style="width:26%;background:#059669">42 (13.4%)</div></div>
+          </div>
+          <div class="funnel-row">
+            <div class="funnel-label" style="color:var(--red)">Sin gestión (101)</div>
+            <div class="funnel-track"><div class="funnel-fill" style="width:32%;background:#ED1C24">101 (32.2%)</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Estado por centro operativo</div>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#ED1C24"></span>Reportado</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Citado</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#8b5cf6"></span>En descargos</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#3AAA35"></span>Notificado</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#059669"></span>Archivado</span>
+      </div>
+      <div class="chart-canvas-wrap" style="height:240px">
+        <canvas id="chartEstadoCentro" role="img" aria-label="Estado por centro. Bianchi: 33 reportados, 31 citados, 11 descargos, 7 notificados, 16 archivados. Supercoco: 43, 37, 9, 13, 11. Trululu: 25, 28, 10, 25, 15.">Estado por centro operativo.</canvas>
+      </div>
+      <div class="insight insight-warn" style="margin-top:12px">
+        <strong>Supercoco concentra más "Reportados":</strong> 43 de 113 casos (38%) sin inicio de gestión. Trululu, en contraste, tiene la mayor proporción de Notificados (25), indicando mayor madurez en el cierre de procesos.
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══ S5: ATENCIÓN ══ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div>
+        <div class="section-title">Atención de casos por centro productivo</div>
+        <div class="section-desc">Proporción de casos con atención (Finalizado + A tiempo) sobre el total recibido</div>
+      </div>
+    </div>
+    <div class="filter-bar">
+      <span class="filter-label">Vista:</span>
+      <button class="filter-btn active" onclick="filterAtencion('cons',this)">Consolidado</button>
+      <button class="filter-btn" onclick="filterAtencion('ind',this)">Por centro</button>
+    </div>
+    <div id="aten-cons" class="tab-panel active">
+      <div class="card">
+        <div class="card-title">Tasa de atención por mes y centro (%)</div>
+        <div class="legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#1B6BB0"></span>Mayo</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#3AAA35"></span>Junio</span>
+        </div>
+        <div class="chart-canvas-wrap" style="height:230px">
+          <canvas id="chartAtenCons" role="img" aria-label="Tasa de atención mayo y junio por centro. Bianchi mayo 50% junio 69.2%. Supercoco mayo 56.2% junio 47.7%. Trululu mayo 70.5% junio 61.9%.">Tasa de atención por centro.</canvas>
+        </div>
+      </div>
+    </div>
+    <div id="aten-ind" class="tab-panel">
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title">Bianchi</div>
+          <div class="chart-canvas-wrap" style="height:160px">
+            <canvas id="chartAtenB" role="img" aria-label="Bianchi mayo 50%, junio 69.2%">Bianchi.</canvas>
+          </div>
+          <div class="mini-stat"><div class="mini-val" style="color:var(--blue)">59.6%</div><div class="mini-lbl">Promedio bimestral</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Supercoco</div>
+          <div class="chart-canvas-wrap" style="height:160px">
+            <canvas id="chartAtenS" role="img" aria-label="Supercoco mayo 56.2%, junio 47.7%">Supercoco.</canvas>
+          </div>
+          <div class="mini-stat"><div class="mini-val" style="color:var(--orange)">52.2%</div><div class="mini-lbl">Promedio bimestral</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Trululu</div>
+          <div class="chart-canvas-wrap" style="height:160px">
+            <canvas id="chartAtenT" role="img" aria-label="Trululu mayo 70.5%, junio 61.9%">Trululu.</canvas>
+          </div>
+          <div class="mini-stat"><div class="mini-val" style="color:var(--green)">66.8%</div><div class="mini-lbl">Promedio bimestral</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="insight insight-ok" style="margin-top:14px">
+      <strong>Trululu lidera</strong> con 66.8% de tasa de atención promedio. Supercoco presenta el mayor rezago (52.2%) y en junio cae al 47.7%, señal de acumulación de casos no gestionados. Bianchi mejora notablemente de mayo a junio (+19 pp).
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══ S6: TIEMPO CIERRE ══ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <div>
+        <div class="section-title">Tiempo promedio de cierre</div>
+        <div class="section-desc">Análisis por etapas del proceso · n = 40 procesos con cierre registrado</div>
+      </div>
+    </div>
+
+    <!-- Nota metodológica -->
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px 18px;margin-bottom:16px;display:flex;gap:12px;align-items:flex-start">
+      <div style="font-size:18px;flex-shrink:0;margin-top:1px">ℹ️</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.6">
+        <strong style="color:var(--text)">Contexto del proceso:</strong> el tiempo entre citación y descargos <strong style="color:var(--text)">debería ser máximo 6 días</strong> según normativa interna. Sin embargo, cuando el colaborador no asiste a la citación, <strong style="color:var(--text)">debe ser reprogramado</strong>, y dependiendo del esquema de turnos (diurno, nocturno, 12h) esto puede extender significativamente este tramo. Este factor operativo explica en gran medida por qué el promedio real supera la meta de 12–15 días de proceso total.
+      </div>
+    </div>
+
+    <!-- KPIs de tramos -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:16px">
+      <div class="kpi-card" style="--ac:#64748b">
+        <div class="kpi-label">① Creación → Citación</div>
+        <div class="kpi-value" style="font-size:22px">7.9d</div>
+        <div class="kpi-sub">promedio consolidado</div>
+        <div class="kpi-sub" style="margin-top:3px">mediana: 6.0d · n=171</div>
+      </div>
+      <div class="kpi-card" style="--ac:#ED1C24">
+        <div class="kpi-label">② Citación → Descargos</div>
+        <div class="kpi-value" style="font-size:22px;color:#ED1C24">11.4d</div>
+        <div class="kpi-sub">promedio — meta: ≤6d</div>
+        <div class="kpi-sub" style="margin-top:3px">solo 12.2% cumple la meta</div>
+      </div>
+      <div class="kpi-card" style="--ac:#3AAA35">
+        <div class="kpi-label">③ Descargos → Notificación</div>
+        <div class="kpi-value" style="font-size:22px;color:#3AAA35">5.7d</div>
+        <div class="kpi-sub">promedio — dentro de meta</div>
+        <div class="kpi-sub" style="margin-top:3px">mediana: 5.0d · n=40</div>
+      </div>
+      <div class="kpi-card" style="--ac:#8b5cf6">
+        <div class="kpi-label">Total proceso</div>
+        <div class="kpi-value" style="font-size:22px;color:#8b5cf6">22.9d</div>
+        <div class="kpi-sub">meta ideal: 12–15 días</div>
+        <div class="kpi-sub" style="margin-top:3px">+7.9d sobre límite superior</div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="gap:16px;margin-bottom:14px">
+      <!-- Gráfico tramos por centro -->
+      <div class="card">
+        <div class="card-title">Duración por etapa y centro (días promedio)</div>
+        <div class="legend" style="margin-bottom:10px">
+          <span class="legend-item"><span class="legend-dot" style="background:#94a3b8"></span>① Creac. → Citación</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#ED1C24"></span>② Citación → Descargos</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#3AAA35"></span>③ Descargos → Notif.</span>
+        </div>
+        <div class="chart-canvas-wrap" style="height:220px">
+          <canvas id="chartTramos" role="img" aria-label="Tramos de tiempo por centro. Bianchi: 6.4, 11.0, 1.1 días. Supercoco: 8.1, 13.0, 7.8 días. Trululu: 8.9, 10.7, 6.2 días.">Etapas del proceso por centro.</canvas>
+        </div>
+        <div class="insight insight-red" style="margin-top:12px">
+          <strong>Etapa crítica — Citación → Descargos:</strong> los tres centros superan la meta de 6 días en este tramo. El principal factor es la reprogramación de colaboradores que no asisten, condicionada por sus esquemas de turno.
+        </div>
+      </div>
+
+      <!-- Distribución cumplimiento tramo 2 + total por centro -->
+      <div class="card">
+        <div class="card-title">Cumplimiento meta ≤6d en tramo Citación→Descargos</div>
+        <div class="chart-canvas-wrap" style="height:150px">
+          <canvas id="chartCumplimiento" role="img" aria-label="Distribución de días entre citación y descargos. 12.2% cumple meta de 6 días, 27% entre 7 y 10 días, 60.8% supera 10 días.">Cumplimiento meta citación-descargos.</canvas>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:center;margin:8px 0 12px;flex-wrap:wrap">
+          <span style="font-size:11px;display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#3AAA35;flex-shrink:0"></span>≤6d (12.2%)</span>
+          <span style="font-size:11px;display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#F7941D;flex-shrink:0"></span>7–10d (27.0%)</span>
+          <span style="font-size:11px;display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#ED1C24;flex-shrink:0"></span>>10d (60.8%)</span>
+        </div>
+        <div class="card-title" style="margin-top:4px">Total proceso por centro (días)</div>
+        <div style="margin-top:6px">
+          <div class="funnel-row">
+            <div class="funnel-label">Bianchi</div>
+            <div class="funnel-track"><div class="funnel-fill" style="width:55%;background:#1B6BB0">17.6d</div></div>
+          </div>
+          <div class="funnel-row">
+            <div class="funnel-label">Supercoco</div>
+            <div class="funnel-track"><div class="funnel-fill" style="width:88%;background:#ED1C24">27.4d</div></div>
+          </div>
+          <div class="funnel-row">
+            <div class="funnel-label">Trululu</div>
+            <div class="funnel-track"><div class="funnel-fill" style="width:72%;background:#F7941D">23.0d</div></div>
+          </div>
+          <div class="funnel-row">
+            <div class="funnel-label" style="font-weight:600">Consolidado</div>
+            <div class="funnel-track"><div class="funnel-fill" style="width:73%;background:#64748b">22.9d</div></div>
+          </div>
+        </div>
+        <div style="margin-top:8px;display:flex;gap:16px">
+          <div style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px"><span style="width:20px;border-top:2px dashed #3AAA35;display:inline-block"></span>Meta inf. 12d</div>
+          <div style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px"><span style="width:20px;border-top:2px dashed #F7941D;display:inline-block"></span>Meta sup. 15d</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráfico total con meta -->
+    <div class="card">
+      <div class="card-title">Tiempo total de cierre por centro — barras apiladas por etapa (días)</div>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#94a3b8"></span>Creación → Citación</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#ED1C24"></span>Citación → Descargos <em style="font-style:normal;font-size:10px">(meta ≤6d — factor: reprogramación por turno)</em></span>
+        <span class="legend-item"><span class="legend-dot" style="background:#3AAA35"></span>Descargos → Notificación</span>
+      </div>
+      <div class="chart-canvas-wrap" style="height:240px">
+        <canvas id="chartTiempo" role="img" aria-label="Tiempo total apilado por etapa y centro. Bianchi total 17.6d, Supercoco 27.4d, Trululu 23.0d. Meta 12-15 días.">Tiempo cierre por centro.</canvas>
+      </div>
+      <div class="insight insight-warn" style="margin-top:12px">
+        <strong>El tramo ② concentra el mayor desvío:</strong> la etapa Citación→Descargos aporta en promedio 11.4d al proceso total, casi el doble de la meta de 6d. La reprogramación por inasistencia — agravada por esquemas de turno de 12h o nocturnos — es el principal driver de los tiempos extendidos. La etapa ③ (Descargos→Notificación) sí cumple la meta en todos los centros (5.7d promedio).
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══ S7: REPORTADOS SIN GESTIÓN POR TIPO CONTRATANTE ══ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <div>
+        <div class="section-title">Reportados sin gestión — vinculación y estado de atención</div>
+        <div class="section-desc">101 casos clasificados por tipo de contratante e indicador de atención (A tiempo / Vencido)</div>
+      </div>
+    </div>
+
+    <!-- KPIs fila 1: tipo vinculación -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px">
+      <div class="kpi-card" style="--ac:#ED1C24">
+        <div class="kpi-label">Total sin gestión</div>
+        <div class="kpi-value">101</div>
+        <div class="kpi-sub">período mayo–junio</div>
+      </div>
+      <div class="kpi-card" style="--ac:#ED1C24">
+        <div class="kpi-label">Vencidos</div>
+        <div class="kpi-value" style="color:#ED1C24">71</div>
+        <div class="kpi-sub">70.3% — fuera de plazo</div>
+      </div>
+      <div class="kpi-card" style="--ac:#3AAA35">
+        <div class="kpi-label">A tiempo</div>
+        <div class="kpi-value" style="color:#3AAA35">30</div>
+        <div class="kpi-sub">29.7% — aún en plazo</div>
+      </div>
+      <div class="kpi-card" style="--ac:#F7941D">
+        <div class="kpi-label">Temporales / Directos</div>
+        <div class="kpi-value" style="font-size:20px">57 / 44</div>
+        <div class="kpi-sub">56.4% temporal · 43.6% directo</div>
+      </div>
+    </div>
+
+    <!-- Fila de gráficos principales -->
+    <div class="grid-2" style="gap:16px;margin-bottom:16px">
+
+      <!-- Donut: 4 segmentos (temporal a tiempo, temporal vencido, directo a tiempo, directo vencido) -->
+      <div class="card">
+        <div class="card-title">Distribución global — tipo de vinculación y atención</div>
+        <div style="display:flex;gap:8px;justify-content:center;margin-bottom:10px;flex-wrap:wrap">
+          <span class="legend-item"><span class="legend-dot" style="background:#3AAA35"></span>Directo — A tiempo (17)</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#1B6BB0"></span>Directo — Vencido (27)</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#FBBF24"></span>Temporal — A tiempo (13)</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#ED1C24"></span>Temporal — Vencido (44)</span>
+        </div>
+        <div class="chart-canvas-wrap" style="height:210px">
+          <canvas id="chartRepTipoDonut" role="img" aria-label="Directo a tiempo 17, Directo vencido 27, Temporal a tiempo 13, Temporal vencido 44.">Distribución por vinculación y atención.</canvas>
+        </div>
+      </div>
+
+      <!-- Barras agrupadas por empresa: A tiempo vs Vencido -->
+      <div class="card">
+        <div class="card-title">Por empresa contratante — A tiempo vs. Vencido</div>
+        <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+          <span class="legend-item"><span class="legend-dot" style="background:#3AAA35"></span>A tiempo</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#ED1C24"></span>Vencido</span>
+        </div>
+        <div class="chart-canvas-wrap" style="height:210px">
+          <canvas id="chartRepEmpresa" role="img" aria-label="Templeamos: 7 a tiempo, 23 vencidos. Jobytalent: 6, 9. Contactamos: 0, 12. Com. Super: 6, 12. Trululu: 8, 4. Super: 1, 11. Inventiva: 2, 0.">A tiempo vs vencido por empresa.</canvas>
+        </div>
+        <div class="insight insight-red" style="margin-top:12px">
+          <strong>Contactamos: 0 casos a tiempo</strong> — los 12 reportados están vencidos. Super (11/12 vencidos) y Templeamos (23/30) son los más críticos en volumen.
+        </div>
+      </div>
+    </div>
+
+    <!-- Barras apiladas por centro: A tiempo vs Vencido separado por tipo vinculación -->
+    <div class="card">
+      <div class="card-title">Por centro operativo — A tiempo vs. Vencido, desglosado por vinculación</div>
+      <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+        <span class="legend-item"><span class="legend-dot" style="background:#3AAA35"></span>Directo — A tiempo</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#1B6BB0"></span>Directo — Vencido</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#FBBF24"></span>Temporal — A tiempo</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#ED1C24"></span>Temporal — Vencido</span>
+      </div>
+      <div class="chart-canvas-wrap" style="height:240px">
+        <canvas id="chartRepCentroTipo" role="img" aria-label="Bianchi: directo a tiempo 7, directo vencido 9, temporal a tiempo 7, temporal vencido 10. Supercoco: 6, 17, 4, 16. Trululu: 4, 1, 2, 18.">Por centro y vinculación.</canvas>
+      </div>
+      <div class="insight insight-red" style="margin-top:14px">
+        <strong>Trululu: mayor urgencia temporal</strong> — 18 de sus 20 reportados temporales están vencidos (90%). <strong>Supercoco</strong> acumula el mayor número de directos vencidos (17 de 23). Bianchi es el centro con mejor proporción de casos aún a tiempo (14 de 33).
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- CONCLUSIONES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num" style="background:var(--dark);font-size:14px">✓</div>
+      <div><div class="section-title">Conclusiones ejecutivas</div><div class="section-desc">Hallazgos clave del período mayo – junio 2026</div></div>
+    </div>
+    <div class="grid-2" style="gap:14px">
+      <div class="card" style="border-left:3px solid var(--green)">
+        <p style="font-size:11px;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Avances positivos</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:9px">
+          <li style="display:flex;gap:8px;font-size:12px"><span style="color:var(--green);font-weight:700;flex-shrink:0">→</span>El 40.1% de los casos tiene gestión activa (Citado + En descargos), mostrando capacidad de respuesta del área GTH.</li>
+          <li style="display:flex;gap:8px;font-size:12px"><span style="color:var(--green);font-weight:700;flex-shrink:0">→</span>Trululu lidera en tasa de atención (66.8%) y en número de Notificados (25 casos cerrados formalmente).</li>
+          <li style="display:flex;gap:8px;font-size:12px"><span style="color:var(--green);font-weight:700;flex-shrink:0">→</span>Bianchi muestra la mayor mejora en atención de mayo a junio (+19 pp), pasando de 50% a 69.2%.</li>
+        </ul>
+      </div>
+      <div class="card" style="border-left:3px solid var(--red)">
+        <p style="font-size:11px;font-weight:600;color:var(--red);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Alertas y acciones requeridas</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:9px">
+          <li style="display:flex;gap:8px;font-size:12px"><span style="color:var(--red);font-weight:700;flex-shrink:0">!</span>101 casos en estado "Reportado" sin ningún avance — Supercoco concentra el 43% de ellos. Activar seguimiento inmediato.</li>
+          <li style="display:flex;gap:8px;font-size:12px"><span style="color:var(--red);font-weight:700;flex-shrink:0">!</span>Tiempo promedio de cierre (22.9d) supera el rango ideal de 12–15 días. Supercoco en 27.4d requiere revisión urgente del proceso.</li>
+          <li style="display:flex;gap:8px;font-size:12px"><span style="color:var(--red);font-weight:700;flex-shrink:0">!</span>Ausentismo (118 casos, 37.6%) es la causal dominante en los tres centros — se requiere intervención preventiva estructurada.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="report-footer">
+  Informe Procesos Disciplinarios May–Jun 2026 · Gestión del Talento Humano · Golosinas Trululu · Uso interno y confidencial
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ── Fecha header
+  var el = document.getElementById('fecha-gen');
+  if (el) el.textContent = new Date().toLocaleDateString('es-CO', {day:'2-digit', month:'long', year:'numeric'});
+
+  // ── Colores
+  var BLUE='#1B6BB0', GREEN='#3AAA35', ORANGE='#F7941D', RED='#ED1C24';
+  var PURPLE='#8b5cf6', AMBER='#f59e0b', GRAY='#94a3b8', TEAL='#059669';
+
+  // ── Defaults Chart.js
+  Chart.defaults.font.family = "'DM Sans', sans-serif";
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = '#64748b';
+  Chart.defaults.plugins.legend.display = false;
+
+  // ── Plugin etiquetas verticales (barras verticales apiladas y agrupadas)
+  var labelPlugin = {
+    id: 'labelPlugin',
+    afterDatasetsDraw: function(chart) {
+      var type = chart.config.type;
+      if (type !== 'bar') return;
+      var indexAxis = chart.config.options && chart.config.options.indexAxis;
+      if (indexAxis === 'y') return; // horizontales las maneja dlH
+      var ctx = chart.ctx;
+      chart.data.datasets.forEach(function(ds, i) {
+        var meta = chart.getDatasetMeta(i);
+        if (meta.hidden) return;
+        meta.data.forEach(function(pt, j) {
+          var v = ds.data[j];
+          if (v === null || v === undefined || v === 0) return;
+          var barH = Math.abs(pt.base - pt.y);
+          ctx.save();
+          if (barH > 20) {
+            ctx.font = '500 11px DM Sans, sans-serif';
+            ctx.fillStyle = '#fff';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(v, pt.x, pt.y + barH / 2);
+          }
+          ctx.restore();
+        });
+      });
+    }
+  };
+  Chart.register(labelPlugin);
+
+  // ── Plugin etiquetas horizontales
+  function makeHLabel(chart) {
+    var ctx = chart.ctx;
+    chart.data.datasets.forEach(function(ds, i) {
+      var meta = chart.getDatasetMeta(i);
+      if (meta.hidden) return;
+      meta.data.forEach(function(pt, j) {
+        var v = ds.data[j];
+        if (!v) return;
+        var bW = Math.abs(pt.base - pt.x);
+        ctx.save();
+        ctx.font = '500 11px DM Sans, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        if (bW > 28) {
+          ctx.fillStyle = '#fff';
+          ctx.fillText(v, pt.base + bW / 2 - 8, pt.y);
+        } else {
+          ctx.fillStyle = '#1e2432';
+          ctx.fillText(v, pt.x + 4, pt.y);
+        }
+        ctx.restore();
+      });
+    });
+  }
+  var dlH = { id: 'dlH', afterDatasetsDraw: makeHLabel };
+
+  // ── Helpers opciones
+  function barOpt(yMax, pct) {
+    return {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: function(ctx) { return ' ' + ctx.formattedValue + (pct ? '%' : ''); } } }
+      },
+      scales: {
+        x: { grid: { display: false }, border: { display: false } },
+        y: { max: yMax, grid: { color: '#f1f5f9' }, border: { display: false },
+             ticks: { callback: function(v) { return v + (pct ? '%' : ''); } } }
+      }
+    };
+  }
+
+  function hBarOpt(xMax) {
+    return {
+      responsive: true,
+      maintainAspectRatio: false,
+      indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { grid: { display: false }, border: { display: false }, ticks: { font: { size: 11 } } },
+        x: { max: xMax, grid: { color: '#f1f5f9' }, border: { display: false } }
+      }
+    };
+  }
+
+  // ────────────────────────────────────────────────
+  // S1: Reportadas vs Ejecutadas
+  // ────────────────────────────────────────────────
+  new Chart(document.getElementById('chartRvsE'), {
+    type: 'bar',
+    data: {
+      labels: ['Mayo', 'Junio'],
+      datasets: [
+        { label: 'Reportadas', data: [155, 159], backgroundColor: BLUE, borderRadius: 6, borderSkipped: false },
+        { label: 'Ejecutadas',  data: [81, 6],   backgroundColor: GREEN,  borderRadius: 6, borderSkipped: false },
+        { label: 'Pendientes',  data: [74, 153],  backgroundColor: ORANGE, borderRadius: 6, borderSkipped: false }
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { x: { grid: { display: false }, border: { display: false } },
+                y: { max: 180, grid: { color: '#f1f5f9' }, border: { display: false } } } }
+  });
+
+  // S1: Donut estados
+  new Chart(document.getElementById('chartDonut'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Reportado', 'Citado', 'Notificado', 'Archivado', 'En descargos'],
+      datasets: [{ data: [101, 96, 45, 42, 30], backgroundColor: [RED, AMBER, GREEN, TEAL, PURPLE],
+                   borderWidth: 2, borderColor: '#fff', hoverOffset: 4 }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, cutout: '62%',
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { label: function(ctx) {
+          return ' ' + ctx.label + ': ' + ctx.raw + ' (' + (ctx.raw / 314 * 100).toFixed(1) + '%)';
+        }}}
+      }
+    },
+    plugins: [{
+      id: 'donutCenter',
+      afterDraw: function(chart) {
+        var ca = chart.chartArea;
+        var ctx = chart.ctx;
+        ctx.save();
+        ctx.font = '600 20px DM Sans';
+        ctx.fillStyle = '#1e2432';
+        ctx.textAlign = 'center';
+        ctx.fillText('314', ca.left + (ca.right - ca.left) / 2, ca.top + (ca.bottom - ca.top) / 2 - 6);
+        ctx.font = '400 10px DM Sans';
+        ctx.fillStyle = '#64748b';
+        ctx.fillText('solicitudes', ca.left + (ca.right - ca.left) / 2, ca.top + (ca.bottom - ca.top) / 2 + 12);
+        ctx.restore();
+      }
+    }]
+  });
+
+  // ────────────────────────────────────────────────
+  // S2: Centro / Planta con filtro
+  // ────────────────────────────────────────────────
+  var centroData = {
+    todos:   { labels: ['Supercoco','Trululu','Bianchi'],     data: [113,103,98],     colors: [ORANGE,GREEN,BLUE] },
+    bianchi: { labels: ['Bianchi'],                            data: [98],             colors: [BLUE] },
+    super:   { labels: ['Supercoco'],                          data: [113],            colors: [ORANGE] },
+    trululu: { labels: ['Trululu'],                            data: [103],            colors: [GREEN] }
+  };
+  var plantaData = {
+    todos:   { labels: ['Pl.3 SC','Pl.B3','CEDI','Pl.1 SC','Pl.B1','Emb.SC','Emb.Tru2','Pl.B2','Tru1','Tru ST'],
+               data: [54,47,29,21,19,16,14,14,12,11], colors: [ORANGE,BLUE,GREEN,ORANGE,BLUE,ORANGE,GREEN,BLUE,GREEN,GREEN] },
+    bianchi: { labels: ['Pl.B3','Pl.B1','Pl.B2','Pl.B5','Emb.B'], data: [47,19,14,10,4], colors: [BLUE,BLUE,BLUE,BLUE,BLUE] },
+    super:   { labels: ['Planta 3','Planta 1','Embolsado','PMPS','Planta 2'], data: [54,21,16,7,6], colors: [ORANGE,ORANGE,ORANGE,ORANGE,ORANGE] },
+    trululu: { labels: ['CEDI','Emb.Tru2','Tru1','Tru ST','BMP','Tru3'], data: [29,14,12,11,10,7], colors: [GREEN,GREEN,GREEN,GREEN,GREEN,GREEN] }
+  };
+
+  var chCentro = new Chart(document.getElementById('chartCentro'), {
+    type: 'bar',
+    data: { labels: centroData.todos.labels, datasets: [{ data: centroData.todos.data, backgroundColor: centroData.todos.colors, borderRadius: 8, borderSkipped: false }] },
+    options: barOpt(130, false)
+  });
+  var chPlanta = new Chart(document.getElementById('chartPlanta'), {
+    type: 'bar',
+    data: { labels: plantaData.todos.labels, datasets: [{ data: plantaData.todos.data, backgroundColor: plantaData.todos.colors, borderRadius: 6, borderSkipped: false }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+      scales: { x: { grid: { display: false }, border: { display: false }, ticks: { font: { size: 10 } } },
+                y: { max: 65, grid: { color: '#f1f5f9' }, border: { display: false } } } }
+  });
+
+  window.filterCentro = function(k, btn) {
+    document.querySelectorAll('.filter-bar .filter-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    var cd = centroData[k], pd = plantaData[k];
+    chCentro.data.labels = cd.labels;
+    chCentro.data.datasets[0].data = cd.data;
+    chCentro.data.datasets[0].backgroundColor = cd.colors;
+    chCentro.update();
+    chPlanta.data.labels = pd.labels;
+    chPlanta.data.datasets[0].data = pd.data;
+    chPlanta.data.datasets[0].backgroundColor = pd.colors;
+    chPlanta.update();
+  };
+
+  // ────────────────────────────────────────────────
+  // S3: Motivos (horizontal, tabs)
+  // ────────────────────────────────────────────────
+  var labCons = ['Ausentismo laboral','Inc. funciones','Inc. de horarios','Inc. de BPM','Ingreso celular','No entrega doc.','Ingreso vapeador','Daños instal.'];
+  new Chart(document.getElementById('chartMotCons'), {
+    type: 'bar', data: { labels: labCons,
+      datasets: [{ data: [118,44,43,26,24,15,8,7], backgroundColor: [RED,ORANGE,BLUE,GREEN,PURPLE,AMBER,TEAL,GRAY], borderRadius: 5, borderSkipped: false }] },
+    options: hBarOpt(130), plugins: [dlH]
+  });
+  new Chart(document.getElementById('chartMotBianchi'), {
+    type: 'bar', data: { labels: ['Ausentismo laboral','Inc. de horarios','Inc. de BPM','Ingreso celular','Inc. funciones','No entrega doc.'],
+      datasets: [{ data: [33,21,10,7,6,5], backgroundColor: BLUE, borderRadius: 5, borderSkipped: false }] },
+    options: hBarOpt(38), plugins: [dlH]
+  });
+  new Chart(document.getElementById('chartMotSuper'), {
+    type: 'bar', data: { labels: ['Ausentismo laboral','Inc. funciones','Inc. de horarios','Inc. de BPM','No entrega doc.','Disminuir ritmo'],
+      datasets: [{ data: [42,29,14,7,5,3], backgroundColor: ORANGE, borderRadius: 5, borderSkipped: false }] },
+    options: hBarOpt(48), plugins: [dlH]
+  });
+  new Chart(document.getElementById('chartMotTrululu'), {
+    type: 'bar', data: { labels: ['Ausentismo laboral','Ingreso celular','Inc. funciones','Inc. de BPM','Inc. de horarios','Ingreso vapeador'],
+      datasets: [{ data: [43,15,9,9,8,5], backgroundColor: GREEN, borderRadius: 5, borderSkipped: false }] },
+    options: hBarOpt(50), plugins: [dlH]
+  });
+
+  // ────────────────────────────────────────────────
+  // S4: Estado por centro
+  // ────────────────────────────────────────────────
+  new Chart(document.getElementById('chartEstadoCentro'), {
+    type: 'bar',
+    data: { labels: ['Bianchi','Supercoco','Trululu'],
+      datasets: [
+        { label: 'Reportado',     data: [33,43,25], backgroundColor: RED,    borderRadius: 0, borderSkipped: false },
+        { label: 'Citado',        data: [31,37,28], backgroundColor: AMBER,  borderRadius: 0, borderSkipped: false },
+        { label: 'En descargos',  data: [11,9,10],  backgroundColor: PURPLE, borderRadius: 0, borderSkipped: false },
+        { label: 'Notificado',    data: [7,13,25],  backgroundColor: GREEN,  borderRadius: 0, borderSkipped: false },
+        { label: 'Archivado',     data: [16,11,15], backgroundColor: TEAL,   borderRadius: 0, borderSkipped: false }
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
+      scales: { x: { stacked: true, grid: { display: false }, border: { display: false } },
+                y: { stacked: true, max: 115, grid: { color: '#f1f5f9' }, border: { display: false } } } }
+  });
+
+  // ────────────────────────────────────────────────
+  // S5: Atención
+  // ────────────────────────────────────────────────
+  new Chart(document.getElementById('chartAtenCons'), {
+    type: 'bar',
+    data: { labels: ['Bianchi','Supercoco','Trululu'],
+      datasets: [
+        { label: 'Mayo',  data: [50.0, 56.2, 70.5], backgroundColor: BLUE,  borderRadius: 6, borderSkipped: false },
+        { label: 'Junio', data: [69.2, 47.7, 61.9], backgroundColor: GREEN, borderRadius: 6, borderSkipped: false }
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { label: function(ctx) { return ' ' + ctx.dataset.label + ': ' + ctx.raw + '%'; } } } },
+      scales: { x: { grid: { display: false }, border: { display: false } },
+                y: { max: 85, grid: { color: '#f1f5f9' }, border: { display: false },
+                     ticks: { callback: function(v) { return v + '%'; } } } } }
+  });
+  var miniOpt = { responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: { x: { display: false }, y: { display: false, max: 80 } } };
+  new Chart(document.getElementById('chartAtenB'), { type:'bar', data:{ labels:['May','Jun'], datasets:[{ data:[50.0,69.2], backgroundColor:[BLUE,GREEN], borderRadius:6, borderSkipped:false }]}, options: miniOpt });
+  new Chart(document.getElementById('chartAtenS'), { type:'bar', data:{ labels:['May','Jun'], datasets:[{ data:[56.2,47.7], backgroundColor:[ORANGE,RED], borderRadius:6, borderSkipped:false }]}, options: miniOpt });
+  new Chart(document.getElementById('chartAtenT'), { type:'bar', data:{ labels:['May','Jun'], datasets:[{ data:[70.5,61.9], backgroundColor:[GREEN,BLUE], borderRadius:6, borderSkipped:false }]}, options: miniOpt });
+
+  window.filterAtencion = function(k, btn) {
+    btn.closest('.section').querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    ['aten-cons','aten-ind'].forEach(function(id) { var p = document.getElementById(id); if (p) p.classList.remove('active'); });
+    var target = document.getElementById('aten-' + k);
+    if (target) target.classList.add('active');
+  };
+
+  // ────────────────────────────────────────────────
+  // S6: Tramos agrupados por centro
+  // ────────────────────────────────────────────────
+  new Chart(document.getElementById('chartTramos'), {
+    type: 'bar',
+    data: { labels: ['Bianchi','Supercoco','Trululu'],
+      datasets: [
+        { label: 'Creacion a Citacion',     data: [6.4,8.1,8.9],   backgroundColor: GRAY,   borderRadius: 5, borderSkipped: false },
+        { label: 'Citacion a Descargos',    data: [11.0,13.0,10.7], backgroundColor: RED,    borderRadius: 5, borderSkipped: false },
+        { label: 'Descargos a Notificacion',data: [1.1,7.8,6.2],   backgroundColor: GREEN,  borderRadius: 5, borderSkipped: false }
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { label: function(ctx) { return ' ' + ctx.dataset.label + ': ' + ctx.raw + 'd'; } } } },
+      scales: { x: { grid: { display: false }, border: { display: false } },
+                y: { max: 16, grid: { color: '#f1f5f9' }, border: { display: false },
+                     ticks: { callback: function(v) { return v + 'd'; } } } } },
+    plugins: [{
+      id: 'metaLine6',
+      afterDraw: function(chart) {
+        var ca = chart.chartArea, ctx = chart.ctx, y = chart.scales.y;
+        var yPos = y.getPixelForValue(6);
+        ctx.save();
+        ctx.setLineDash([5,4]); ctx.strokeStyle = '#F7941D'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(ca.left, yPos); ctx.lineTo(ca.right, yPos); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.font = '500 10px DM Sans'; ctx.fillStyle = '#F7941D'; ctx.textAlign = 'right';
+        ctx.fillText('Meta: 6d', ca.right - 2, yPos - 4);
+        ctx.restore();
+      }
+    }]
+  });
+
+  // S6: Doughnut cumplimiento Citacion-Descargos
+  new Chart(document.getElementById('chartCumplimiento'), {
+    type: 'doughnut',
+    data: {
+      labels: ['6 dias o menos (12.2%)', '7 a 10 dias (27.0%)', 'Mas de 10 dias (60.8%)'],
+      datasets: [{ data: [9,20,45], backgroundColor: [GREEN, ORANGE, RED], borderWidth: 2, borderColor: '#fff', hoverOffset: 3 }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, cutout: '58%',
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { label: function(ctx) { return ' ' + ctx.label + ': ' + ctx.raw + ' procesos'; } } } }
+    },
+    plugins: [{
+      id: 'cumplCenter',
+      afterDraw: function(chart) {
+        var ca = chart.chartArea, ctx = chart.ctx;
+        var cx = ca.left + (ca.right - ca.left) / 2;
+        var cy = ca.top + (ca.bottom - ca.top) / 2;
+        ctx.save();
+        ctx.font = '600 14px DM Sans'; ctx.fillStyle = '#ED1C24'; ctx.textAlign = 'center';
+        ctx.fillText('60.8%', cx, cy - 4);
+        ctx.font = '400 10px DM Sans'; ctx.fillStyle = '#64748b';
+        ctx.fillText('sup. 10d', cx, cy + 12);
+        ctx.restore();
+      }
+    }]
+  });
+
+  // S6: Barras apiladas totales con metas
+  new Chart(document.getElementById('chartTiempo'), {
+    type: 'bar',
+    data: { labels: ['Bianchi','Supercoco','Trululu'],
+      datasets: [
+        { label: 'Creacion a Citacion',      data: [6.4,8.1,8.9],   backgroundColor: GRAY,  borderRadius: 0, borderSkipped: false },
+        { label: 'Citacion a Descargos',     data: [11.0,13.0,10.7], backgroundColor: RED,   borderRadius: 0, borderSkipped: false },
+        { label: 'Descargos a Notificacion', data: [1.1,7.8,6.2],   backgroundColor: GREEN, borderRadius: 0, borderSkipped: false }
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false },
+        tooltip: { mode: 'index', intersect: false,
+          callbacks: {
+            label: function(ctx) { return ' ' + ctx.dataset.label + ': ' + ctx.raw + 'd'; },
+            footer: function(items) {
+              var total = 0; items.forEach(function(i) { total += i.raw; });
+              return 'Total: ' + total.toFixed(1) + 'd';
+            }
+          }
+        }
+      },
+      scales: { x: { stacked: true, grid: { display: false }, border: { display: false } },
+                y: { stacked: true, max: 32, grid: { color: '#f1f5f9' }, border: { display: false },
+                     ticks: { callback: function(v) { return v + 'd'; } } } } },
+    plugins: [{
+      id: 'metaLines',
+      afterDraw: function(chart) {
+        var ca = chart.chartArea, ctx = chart.ctx, y = chart.scales.y;
+        [{v:15, color:'#F7941D', lbl:'Meta sup. 15d'}, {v:12, color:'#3AAA35', lbl:'Meta inf. 12d'}].forEach(function(m) {
+          var yPos = y.getPixelForValue(m.v);
+          ctx.save();
+          ctx.setLineDash([6,4]); ctx.strokeStyle = m.color; ctx.lineWidth = 1.5;
+          ctx.beginPath(); ctx.moveTo(ca.left, yPos); ctx.lineTo(ca.right, yPos); ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.font = '500 10px DM Sans'; ctx.fillStyle = m.color; ctx.textAlign = 'right';
+          ctx.fillText(m.lbl, ca.right - 2, yPos - 4);
+          ctx.restore();
+        });
+        // Totales sobre barras
+        var meta2 = chart.getDatasetMeta(2);
+        var totales = [17.6, 27.4, 23.0];
+        totales.forEach(function(tot, i) {
+          var bar = meta2.data[i];
+          if (!bar) return;
+          ctx.save();
+          ctx.font = '600 11px DM Sans'; ctx.fillStyle = '#1e2432';
+          ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+          ctx.fillText(tot + 'd', bar.x, bar.y - 4);
+          ctx.restore();
+        });
+      }
+    }]
+  });
+
+  // ────────────────────────────────────────────────
+  // S7: Reportados sin gestión — tipo vinculación + atención
+  // ────────────────────────────────────────────────
+
+  // Donut 4 segmentos: Directo A tiempo / Directo Vencido / Temporal A tiempo / Temporal Vencido
+  new Chart(document.getElementById('chartRepTipoDonut'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Directo — A tiempo', 'Directo — Vencido', 'Temporal — A tiempo', 'Temporal — Vencido'],
+      datasets: [{
+        data: [17, 27, 13, 44],
+        backgroundColor: ['#3AAA35', BLUE, '#FBBF24', RED],
+        borderWidth: 2, borderColor: '#fff', hoverOffset: 4
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, cutout: '60%',
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { label: function(ctx) {
+          return ' ' + ctx.label + ': ' + ctx.raw + ' (' + (ctx.raw / 101 * 100).toFixed(1) + '%)';
+        }}}
+      }
+    },
+    plugins: [{
+      id: 'repDonutCenter',
+      afterDraw: function(chart) {
+        var ca = chart.chartArea, ctx = chart.ctx;
+        var cx = ca.left + (ca.right - ca.left) / 2;
+        var cy = ca.top + (ca.bottom - ca.top) / 2;
+        ctx.save();
+        ctx.font = '600 11px DM Sans'; ctx.fillStyle = RED; ctx.textAlign = 'center';
+        ctx.fillText('71 vencidos', cx, cy - 8);
+        ctx.font = '600 11px DM Sans'; ctx.fillStyle = '#3AAA35';
+        ctx.fillText('30 a tiempo', cx, cy + 8);
+        ctx.restore();
+      }
+    }]
+  });
+
+  // Barras horizontales agrupadas por empresa: A tiempo vs Vencido
+  new Chart(document.getElementById('chartRepEmpresa'), {
+    type: 'bar',
+    data: {
+      labels: ['Templeamos', 'Com. Super', 'Jobytalent', 'Contactamos', 'Trululu', 'Super', 'Inventiva'],
+      datasets: [
+        { label: 'A tiempo', data: [7, 6, 6, 0, 8, 1, 2], backgroundColor: '#3AAA35', borderRadius: 4, borderSkipped: false },
+        { label: 'Vencido',  data: [23, 12, 9, 12, 4, 11, 0], backgroundColor: RED,      borderRadius: 4, borderSkipped: false }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      indexAxis: 'y',
+      plugins: {
+        legend: { display: false },
+        tooltip: { mode: 'index', intersect: false,
+          callbacks: {
+            footer: function(items) {
+              var total = 0; items.forEach(function(i) { total += i.raw; });
+              return 'Total: ' + total;
+            }
+          }
+        }
+      },
+      scales: {
+        y: { grid: { display: false }, border: { display: false }, ticks: { font: { size: 11 } } },
+        x: { max: 35, grid: { color: '#f1f5f9' }, border: { display: false } }
+      }
+    },
+    plugins: [{
+      id: 'empHLabel',
+      afterDatasetsDraw: function(chart) {
+        var ctx = chart.ctx;
+        chart.data.datasets.forEach(function(ds, i) {
+          var meta = chart.getDatasetMeta(i);
+          if (meta.hidden) return;
+          meta.data.forEach(function(pt, j) {
+            var v = ds.data[j];
+            if (!v) return;
+            var bW = Math.abs(pt.base - pt.x);
+            ctx.save();
+            ctx.font = '500 11px DM Sans, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            if (bW > 20) {
+              ctx.fillStyle = '#fff';
+              ctx.fillText(v, pt.base + bW / 2, pt.y);
+            } else {
+              ctx.fillStyle = '#1e2432';
+              ctx.fillText(v, pt.x + 8, pt.y);
+            }
+            ctx.restore();
+          });
+        });
+      }
+    }]
+  });
+
+  // Barras apiladas por centro: 4 segmentos (Directo At / Directo Venc / Temporal At / Temporal Venc)
+  // Bianchi:   Directo At=7, Directo Venc=9, Temporal At=7, Temporal Venc=10
+  // Supercoco: Directo At=6, Directo Venc=17, Temporal At=4, Temporal Venc=16
+  // Trululu:   Directo At=4, Directo Venc=1, Temporal At=2, Temporal Venc=18
+  new Chart(document.getElementById('chartRepCentroTipo'), {
+    type: 'bar',
+    data: {
+      labels: ['Bianchi', 'Supercoco', 'Trululu'],
+      datasets: [
+        { label: 'Directo — A tiempo',  data: [7, 6, 4],  backgroundColor: '#3AAA35', borderRadius: 0, borderSkipped: false },
+        { label: 'Directo — Vencido',   data: [9, 17, 1], backgroundColor: BLUE,      borderRadius: 0, borderSkipped: false },
+        { label: 'Temporal — A tiempo', data: [7, 4, 2],  backgroundColor: '#FBBF24', borderRadius: 0, borderSkipped: false },
+        { label: 'Temporal — Vencido',  data: [10, 16, 18], backgroundColor: RED,     borderRadius: 0, borderSkipped: false }
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false },
+        tooltip: { mode: 'index', intersect: false,
+          callbacks: {
+            footer: function(items) {
+              var total = 0; items.forEach(function(i) { total += i.raw; });
+              return 'Total: ' + total;
+            }
+          }
+        }
+      },
+      scales: {
+        x: { stacked: true, grid: { display: false }, border: { display: false } },
+        y: { stacked: true, max: 50, grid: { color: '#f1f5f9' }, border: { display: false } }
+      }
+    }
+  });
+  window.switchTab = function(id, btn) {
+    var parent = btn.closest('.section');
+    parent.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+    parent.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    var target = parent.querySelector('#' + id);
+    if (target) target.classList.add('active');
+    btn.classList.add('active');
+  };
+
+})();
+</script>
+</body>
+</html>
